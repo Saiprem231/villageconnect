@@ -1,4 +1,4 @@
-VillageConnect — Empowering Rural Communities
+VillageConnect:-Empowering Rural Communities
 
 VillageConnect is a simple and impactful web application built using Flask(Python) and SQLite.  
 It is designed to support rural communities by providing a platform where users can share, discover, and request local services such as water delivery, transportation, health assistance, and more along with a community forum for communication.
@@ -20,8 +20,8 @@ Community Forum
 - 💬 View all public posts on a digital noticeboard
 
 REST API Endpoints
-- `GET /api/services` → Returns all services in JSON
-- `POST /api/services` → Add a service using JSON payload
+- GET /api/services → Returns all services in JSON
+- POST /api/services → Add a service using JSON payload
 
 Technologies Used
 
