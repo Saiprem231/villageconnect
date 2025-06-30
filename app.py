@@ -7,7 +7,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# Models
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -24,14 +24,15 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, nullable=False)
 
-# Create DB tables
+
 with app.app_context():
     db.create_all()
 
-# Routes
+
 @app.route('/')
 def home():
     return render_template('index.html')
+
 
 @app.route('/services', methods=['GET', 'POST'])
 def services():
@@ -40,17 +41,26 @@ def services():
         description = request.form['description']
         location = request.form['location']
         user_id = request.form['user_id']
-        new_service = Service(title=title, description=description, location=location, user_id=int(user_id))
+        new_service = Service(
+            title=title,
+            description=description,
+            location=location,
+            user_id=int(user_id)
+        )
         db.session.add(new_service)
         db.session.commit()
         return redirect('/services')
 
     search = request.args.get('search')
     if search:
-        services = Service.query.filter(Service.title.contains(search) | Service.description.contains(search)).all()
+        services = Service.query.filter(
+            Service.title.contains(search) | 
+            Service.description.contains(search)
+        ).all()
     else:
         services = Service.query.all()
     return render_template('services.html', services=services)
+
 
 @app.route('/delete_service/<int:service_id>', methods=['POST'])
 def delete_service(service_id):
@@ -73,7 +83,7 @@ def forum():
     posts = Post.query.all()
     return render_template('forum.html', posts=posts)
 
-# REST API: Get all services (optionally filtered by search)
+
 @app.route('/api/services', methods=['GET'])
 def api_get_services():
     search = request.args.get('search')
@@ -95,7 +105,7 @@ def api_get_services():
 
     return jsonify(result), 200
 
-# REST API: Create a new service using JSON data
+
 @app.route('/api/services', methods=['POST'])
 def api_create_service():
     data = request.get_json()
@@ -118,7 +128,7 @@ def api_create_service():
         "message": "Service created successfully",
         "id": new_service.id
     }), 201
+    
 
-# Start server
 if __name__ == '__main__':
     app.run(debug=True)
